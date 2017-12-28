@@ -23,11 +23,14 @@ func New(db *sql.DB, jwtSignature string) Server {
 	return s
 }
 
-func (s *Server) Run(address string) {
-	log.Printf("SERVER STARTED AT PORT: %s", address)
+func (s *Server) Run(port string) {
+	log.Printf("SERVER STARTED AT PORT: %s", port)
 	methods := handlers.AllowedMethods([]string{"DELETE", "GET", "HEAD", "POST", "PUT", "OPTIONS"})
-	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"})
+	headers := handlers.AllowedHeaders([]string{"Origins", "Authorization", "X-Requested-With", "Content-Type"})
 	origins := handlers.AllowedOrigins([]string{"*"})
-	log.Fatal(http.ListenAndServe(address, handlers.LoggingHandler(
-		os.Stdout, handlers.CORS(methods, headers, origins)(s.Router))))
+	// TODO: Config by env variable
+	// origins := handlers.AllowedOrigins([]string{"http://localhost:3000"})
+
+	log.Fatal(http.ListenAndServe(port, handlers.LoggingHandler(
+		os.Stdout, handlers.CORS(origins, headers, methods)(s.Router))))
 }
