@@ -9,7 +9,6 @@ import (
 	"github.com/cinn-labs/auth"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	_ "github.com/lib/pq"
 )
 
 type Server struct {
